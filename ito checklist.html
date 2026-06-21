@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>イトー ヨーロッパ不在中チェックリスト</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fffef8;
+    --pink: #ff5bac;
+    --purple: #9b4dca;
+    --blue: #3bb8f5;
+    --teal: #00c9a7;
+    --green: #7dd636;
+    --orange: #ff8c00;
+    --black: #1a1a1a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    font-family: 'Zen Maru Gothic', sans-serif;
+    padding: 28px 18px 80px;
+  }
+  .container { max-width: 680px; margin: 0 auto; }
+
+  .header { text-align: center; padding: 16px 0 28px; }
+  .header-emoji { font-size: 22px; letter-spacing: 4px; margin-bottom: 8px; }
+  .header h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: clamp(28px, 8vw, 44px);
+    background: linear-gradient(90deg, var(--pink), var(--purple), var(--blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: #aaa;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 28px 0 14px;
+  }
+  .label-pill {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 30px;
+    border: 2.5px solid var(--black);
+    color: white;
+  }
+  .lp-pink   { background: var(--pink); }
+  .lp-blue   { background: var(--blue); color: var(--black); }
+  .label-text { font-size: 13px; font-weight: 700; color: var(--black); }
+
+  .check-card {
+    background: white;
+    border: 3px solid var(--black);
+    border-radius: 18px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    box-shadow: 4px 4px 0 var(--pink);
+  }
+  .check-card.blue-shadow { box-shadow: 4px 4px 0 var(--blue); }
+
+  .check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .checkbox {
+    width: 24px; height: 24px;
+    border: 2.5px solid var(--black);
+    border-radius: 7px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .checkbox.checked {
+    background: var(--green);
+  }
+  .checkbox.checked::after {
+    content: '✓';
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .check-content { flex: 1; }
+  .check-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .check-title .count {
+    color: var(--pink);
+    font-family: 'Anton', sans-serif;
+    font-size: 13px;
+    margin-left: 4px;
+  }
+  .check-desc {
+    font-size: 11.5px;
+    color: #555;
+    line-height: 1.7;
+  }
+  .check-row.is-checked .check-title,
+  .check-row.is-checked .check-desc {
+    text-decoration: line-through;
+    color: #bbb;
+  }
+  .check-row.is-checked .check-title .count { color: #ccc; }
+
+  .progress-bar-wrap {
+    background: white;
+    border: 3px solid var(--black);
+    border-radius: 30px;
+    padding: 4px;
+    margin-bottom: 22px;
+    box-shadow: 4px 4px 0 var(--black);
+  }
+  .progress-bar-bg {
+    background: #f0f0f0;
+    border-radius: 30px;
+    height: 22px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-bar-fill {
+    background: linear-gradient(90deg, var(--pink), var(--purple));
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .progress-text {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    margin-top: 8px;
+  }
+
+  .footer { text-align: center; padding-top: 30px; font-size: 18px; letter-spacing: 6px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-emoji">🍑 🍑 🌸</div>
+    <h1>ヨーロッパ不在中<br>チェックリスト</h1>
+    <div class="header-sub">SABOTEN TATTOO PARLOR · ITO</div>
+  </div>
+
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+  </div>
+  <div class="progress-text" id="progressText">0 / 15 完了</div>
+
+  <!-- フラッシュ制作アイデアリスト -->
+  <div class="section-label">
+    <span class="label-pill lp-pink">Flash</span>
+    <span class="label-text">フラッシュ制作アイデアリスト</span>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">レシートに描いてみる<span class="count">×15</span></div>
+        <div class="check-desc">普段の紙とは違うサイズ感や余白を活かしてデザインする。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">付箋に描いてみる<span class="count">×10</span></div>
+        <div class="check-desc">超小さいキャンバスだからこそ面白い。たくさんの付箋にミニフラッシュを描いて、一面に貼ったり、壁に並べたりして見せ方まで工夫してみる。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">方眼紙に描いてみる<span class="count">×1</span></div>
+        <div class="check-desc">マス目をガイドにして、配置やバランスを意識したフラッシュを作る。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">白じゃない紙に描いてみる<span class="count">×2</span></div>
+        <div class="check-desc">紙の色を活かして、いつもと違う雰囲気や温かみのある作品を目指す。物語が見えてきそうな一枚を描いてみること。参考：じじちゃん。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">コピックでベタ塗りデザインを作る<span class="count">×5</span></div>
+        <div class="check-desc">ブラストオーバー映えしそうな、面を活かしたデザインを考える。アウトラインだけぐるぐるで中をベタ塗りにしたり、その逆を試してみても面白い。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">黒のボールペンだけで描いてみる<span class="count">×10</span></div>
+        <div class="check-desc">本当のスケッチブックのドローイングのようなラフさを意識して制作する。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">1つのモチーフを10パターン以上描いてみる<span class="count">×1</span></div>
+        <div class="check-desc">例えば骸骨だけで1ページを埋めるなど、同じ題材をひたすら描いて引き出しを増やす。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">複数のデザインをiPadでコラージュする<span class="count">×3</span></div>
+        <div class="check-desc">アナログで描いたフラッシュを並べるだけでなく、1枚のポスターや作品集のような完成度を目指してレイアウトする。印刷したいものを一つ選ぶ。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">手描き作品を取り込んでデジタルで変形してみる</div>
+        <div class="check-desc">潰す・伸ばす・歪ませる・複製する・反転する・左右対称にするなど、デジタルならではの加工で新しい形を探す。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">「イトーフォント」を作る</div>
+        <div class="check-desc">タイポグラフィ自体が作品になるように、自分らしい文字のルールを研究する。どんな単語でも"イトーっぽい字"で描ける状態を目指す。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">グラフィティタグを作る</div>
+        <div class="check-desc">イトーにしか描けないサインを考える。何も見ずにスラスラ描けるレベルまで練習し、自分のアイコンとして育てる。ポスカやペンなどで、どこにでも自然に書けるようになるまで反復する。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">家にあるぬいぐるみから着想を得る</div>
+        <div class="check-desc">たくさんあるぬいぐるみを観察して、イトーらしい可愛さでキャラクター化したり、フラッシュとして落とし込んでみる。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 予約・施術管理 -->
+  <div class="section-label">
+    <span class="label-pill lp-blue">Booking</span>
+    <span class="label-text">予約・施術管理</span>
+  </div>
+
+  <div class="check-card blue-shadow">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">現状決まっている予約・友達の施術予定をすべて共有する</div>
+        <div class="check-desc">ノートに一覧でまとめて、日付・名前・内容がすぐ確認できる状態にしておく。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card blue-shadow">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">デザインが未確定のものは早めに決める</div>
+        <div class="check-desc">必要があれば事前に打ち合わせを行い、余裕を持って準備を進める。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card blue-shadow">
+    <div class="check-row" onclick="toggleCheck(this)">
+      <div class="checkbox"></div>
+      <div class="check-content">
+        <div class="check-title">施術3日前までにデザインが決まらない場合はリスケを提案する</div>
+        <div class="check-desc">「準備期間を確保したいので、デザインが決まらない場合は日程変更しましょう」と伝えて問題ありません。</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleCheck(row) {
+  const checkbox = row.querySelector('.checkbox');
+  checkbox.classList.toggle('checked');
+  row.classList.toggle('is-checked');
+  updateProgress();
+}
+
+function updateProgress() {
+  const all = document.querySelectorAll('.checkbox');
+  const checked = document.querySelectorAll('.checkbox.checked');
+  const total = all.length;
+  const done = checked.length;
+  const pct = total ? (done / total) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = done + ' / ' + total + ' 完了';
+}
+
+updateProgress();
+</script>
+
+</body>
+</html>
